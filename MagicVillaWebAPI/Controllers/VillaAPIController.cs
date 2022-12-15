@@ -46,6 +46,17 @@ namespace MagicVillaWebAPI.Controllers
         [ProducesResponseTypeAttribute(StatusCodes.Status400BadRequest)]
         public ActionResult<VillaDto> CreateVilla([FromBody] VillaDto villaDto)
         {
+            // if you don't want to include ApiController in above you need to definde own validation like this
+            //if (ModelState.IsValid)
+            //{
+            //    return BadRequest(ModelState);
+            //}
+            // Custom validation to test wheather the name exists or not
+            if (VillaStore.villaList.FirstOrDefault(u => u.Name.ToLower() == villaDto.Name.ToLower()) != null)
+            {
+                ModelState.AddModelError("CustomError", "Villa Already Exists!");
+                return BadRequest(ModelState);
+            }
             if (villaDto == null)
             {
                 return BadRequest(villaDto);
