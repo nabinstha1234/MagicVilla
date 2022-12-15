@@ -72,5 +72,25 @@ namespace MagicVillaWebAPI.Controllers
             return CreatedAtRoute("GetVilla", new { id = villaDto.Id }, villaDto);
         }
 
+        [HttpDelete("{id:int}", Name = "DeleteVilla")]
+
+        public IActionResult DeleteVilla(int id)
+        {
+            if (id == 0)
+            {
+                return BadRequest();
+            }
+
+            var villa = VillaStore.villaList.FirstOrDefault(u => u.Id == id);
+
+            if (villa == null)
+            {
+                return NotFound();
+            }
+
+            VillaStore.villaList.Remove(villa);
+            return NoContent();
+        }
+
     }
 }
